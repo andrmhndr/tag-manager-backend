@@ -15,13 +15,13 @@ export class TagService {
   async getTagSuggestions(search?: string) {
     try {
       if (!search || typeof search !== 'string') {
-        search = ''; // Default value
+        search = '';
       }
 
       const tags = await this.tagModel.aggregate([
         {
           $lookup: {
-            from: 'books', // Koleksi buku tempat tag digunakan
+            from: 'books',
             localField: '_id',
             foreignField: 'tags',
             as: 'books',
@@ -29,27 +29,30 @@ export class TagService {
         },
         {
           $addFields: {
-            count: { $size: '$books' }, // Hitung jumlah buku yang memakai tag
+            count: { $size: '$books' },
           },
         },
         {
-          $match: search
-            ? {
-                $or: [
-                  { name: { $regex: search, $options: 'i' } }, // Cari di name
-                  { hex: { $regex: search, $options: 'i' } }, // Cari di hex
-                ],
-              }
-            : {},
+          $match: {
+            deletedAt: null,
+            ...(search
+              ? {
+                  $or: [
+                    { name: { $regex: search, $options: 'i' } },
+                    { hex: { $regex: search, $options: 'i' } },
+                  ],
+                }
+              : {}),
+          },
         },
-        { $sort: { count: -1 } }, // Urutkan berdasarkan penggunaan terbanyak
-        { $limit: 10 }, // Batasi hasil ke 10 tag teratas
+        { $sort: { count: -1 } },
+        { $limit: 10 },
         {
           $project: {
             _id: 1,
             name: 1,
             hex: 1,
-            count: 1, // Tambahkan jumlah penggunaan tag
+            count: 1,
           },
         },
       ]);

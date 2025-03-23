@@ -15,7 +15,6 @@ async function bootstrap() {
     new ResponseInterceptor(),
     new ErrorInterceptor(),
     new LoggerInterceptor(),
-    // new ClassSerializerInterceptor(app.get(Reflector)),
   );
 
   const configService = app.get(ConfigService);
