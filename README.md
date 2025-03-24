@@ -35,7 +35,9 @@ git clone https://github.com/andrmhndr/tag-manager-backend.git
 
 ### 2️⃣ Install Dependencies
 ```sh
-yarn 
+yarn install
+# or
+npm install
 ```
 
 ### 3️⃣ Configure Environment Variables
@@ -48,6 +50,8 @@ DATABASE_URL=mongodb+srv://andrmhndr:andrmhndr@tag-manager.uswxd.mongodb.net/dev
 ### 4️⃣ Run Server
 ```sh
 yarn dev
+# or
+npm run dev
 ```
 Server akan berjalan di **http://localhost:8080**
 
